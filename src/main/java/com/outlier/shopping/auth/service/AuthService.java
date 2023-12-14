@@ -22,6 +22,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public void signup(SignupRequest request){
+        // username 은 중복 허용 x
         try {
             memberMapper.save(
                     request.username(),
