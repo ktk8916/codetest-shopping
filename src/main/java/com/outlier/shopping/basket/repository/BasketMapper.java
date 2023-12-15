@@ -1,8 +1,10 @@
 package com.outlier.shopping.basket.repository;
 
+import com.outlier.shopping.basket.domain.dto.BasketProductDto;
 import com.outlier.shopping.basket.domain.entity.Basket;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -30,4 +32,10 @@ public interface BasketMapper {
             @Param("quantity") int quantity,
             @Param("basketId") Long basketId
     );
+
+    @Select("select p.id, p.name, p.price, b.quantity " +
+            "from basket as b inner join product p " +
+            "on b.product_id = p.id " +
+            "where b.member_id = #{memberId}")
+    List<BasketProductDto> findMyBasketProduct(@Param("memberId") Long memberId);
 }

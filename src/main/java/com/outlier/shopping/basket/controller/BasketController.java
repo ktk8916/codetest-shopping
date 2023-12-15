@@ -1,6 +1,7 @@
 package com.outlier.shopping.basket.controller;
 
 import com.outlier.shopping.basket.domain.reqeust.ProductAddRequest;
+import com.outlier.shopping.basket.domain.response.BasketResponse;
 import com.outlier.shopping.basket.service.BasketService;
 import com.outlier.shopping.global.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,10 @@ public class BasketController {
             @RequestBody ProductAddRequest request
     ){
         basketService.addProduct(tokenInfo.getId(), request);
+    }
+
+    @GetMapping("/my")
+    public BasketResponse getMyBasket(@AuthenticationPrincipal TokenInfo tokenInfo){
+        return basketService.getMyBasket(tokenInfo.getId());
     }
 }
