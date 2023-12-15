@@ -14,3 +14,10 @@ create table product(
     price int,
     manager_id int
 );
+
+create table basket(
+    id int auto_increment primary key,
+    member_id int,
+    product_id int,
+    quantity int
+);
