@@ -7,3 +7,10 @@ create table member(
     nickname varchar(255),
     unique uk_username(username)
 );
+
+create table product(
+    id int auto_increment primary key,
+    name varchar(255),
+    price int,
+    manager_id int
+);
