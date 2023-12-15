@@ -15,7 +15,7 @@ create table product(
     manager_id int
 );
 
-create table basket(
+create table cartItem(
     id int auto_increment primary key,
     member_id int,
     product_id int,

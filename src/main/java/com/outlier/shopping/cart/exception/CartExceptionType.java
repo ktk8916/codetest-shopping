@@ -1,4 +1,4 @@
-package com.outlier.shopping.basket.exception;
+package com.outlier.shopping.cart.exception;
 
 import com.outlier.shopping.global.exception.AbstractExceptionType;
 import lombok.Getter;
@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum BasketExceptionType implements AbstractExceptionType {
+public enum CartExceptionType implements AbstractExceptionType {
 
-    BASKET_NOT_FOUND(HttpStatus.NOT_FOUND, "basket not found"),
-    INVALID_BASKET_OWNER(HttpStatus.UNAUTHORIZED, "invalid basket owner")
+    CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "cart item not found"),
+    INVALID_CART_OWNER(HttpStatus.UNAUTHORIZED, "invalid cart owner")
 
     ;
 

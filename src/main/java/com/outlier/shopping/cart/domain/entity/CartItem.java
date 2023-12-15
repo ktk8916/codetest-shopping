@@ -1,10 +1,10 @@
-package com.outlier.shopping.basket.domain.entity;
+package com.outlier.shopping.cart.domain.entity;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Basket {
+public class CartItem {
 
     private Long id;
     private Long memberId;
@@ -12,7 +12,7 @@ public class Basket {
     private int quantity;
 
     @Builder
-    public Basket(Long memberId, Long productId, int quantity) {
+    public CartItem(Long memberId, Long productId, int quantity) {
         this.memberId = memberId;
         this.productId = productId;
         this.quantity = quantity;
