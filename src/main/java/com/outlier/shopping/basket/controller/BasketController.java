@@ -30,6 +30,15 @@ public class BasketController {
         return basketService.getMyBasket(tokenInfo.getId());
     }
 
+    @DeleteMapping("/{basketId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(
+            @AuthenticationPrincipal TokenInfo tokenInfo,
+            @PathVariable Long basketId
+    ){
+        basketService.deleteById(tokenInfo.getId(), basketId);
+    }
+
     @DeleteMapping("/my")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMyBasket(@AuthenticationPrincipal TokenInfo tokenInfo){
