@@ -38,4 +38,8 @@ public interface BasketMapper {
             "on b.product_id = p.id " +
             "where b.member_id = #{memberId}")
     List<BasketProductDto> findMyBasketProduct(@Param("memberId") Long memberId);
+
+    @Delete("delete from basket " +
+            "where member_id = #{memberId}")
+    void deleteByMemberId(@Param("memberId") Long memberId);
 }

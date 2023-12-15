@@ -29,4 +29,10 @@ public class BasketController {
     public BasketResponse getMyBasket(@AuthenticationPrincipal TokenInfo tokenInfo){
         return basketService.getMyBasket(tokenInfo.getId());
     }
+
+    @DeleteMapping("/my")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMyBasket(@AuthenticationPrincipal TokenInfo tokenInfo){
+        basketService.deleteMyBasket(tokenInfo.getId());
+    }
 }

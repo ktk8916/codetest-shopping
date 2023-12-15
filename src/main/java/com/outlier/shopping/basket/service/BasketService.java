@@ -40,4 +40,8 @@ public class BasketService {
 
         return BasketResponse.of(basketProduct, totalPrice);
     }
+
+    public void deleteMyBasket(Long memberId) {
+        basketMapper.deleteByMemberId(memberId);
+    }
 }
