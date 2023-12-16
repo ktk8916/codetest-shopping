@@ -16,7 +16,7 @@ public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping
+    @PostMapping("/items")
     @ResponseStatus(HttpStatus.CREATED)
     public void addItem(
             @AuthenticationPrincipal TokenInfo tokenInfo,
@@ -25,7 +25,7 @@ public class CartController {
         cartService.addItem(tokenInfo.getId(), request);
     }
 
-    @GetMapping("/my")
+    @GetMapping("/items/my")
     public CartItemResponse getMyCartItems(@AuthenticationPrincipal TokenInfo tokenInfo){
         return cartService.getMyCartItems(tokenInfo.getId());
     }
@@ -39,7 +39,7 @@ public class CartController {
         cartService.deleteById(tokenInfo.getId(), itemId);
     }
 
-    @DeleteMapping("/my")
+    @DeleteMapping("/items/my")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllMyCartItems(@AuthenticationPrincipal TokenInfo tokenInfo){
         cartService.deleteAllMyCartItems(tokenInfo.getId());
