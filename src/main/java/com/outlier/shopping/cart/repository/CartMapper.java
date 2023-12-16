@@ -41,7 +41,7 @@ public interface CartMapper {
             "from cart_item as c inner join product p " +
             "on c.product_id = p.id " +
             "where c.member_id = #{memberId}")
-    List<CartItemDto> findMyCartItems(@Param("memberId") Long memberId);
+    List<CartItemDto> findCartItemsByMemberId(@Param("memberId") Long memberId);
 
     @Delete("delete from cart_item " +
             "where member_id = #{memberId}")
