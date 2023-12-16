@@ -34,7 +34,7 @@ public class CartService {
     }
 
     public CartItemResponse getMyCartItems(Long memberId) {
-        List<CartItemDto> cartItems = cartMapper.findCartItemsByMemberId(memberId);
+        List<CartItemDto> cartItems = cartMapper.findCartItemDtosByMemberId(memberId);
 
         int totalPrice = cartItems.stream()
                 .mapToInt(item -> item.price() * item.quantity())
@@ -42,6 +42,7 @@ public class CartService {
 
         return CartItemResponse.of(cartItems, totalPrice);
     }
+
     public void deleteById(Long memberId, Long cartItemId) {
         CartItem cartItem = findById(cartItemId);
 

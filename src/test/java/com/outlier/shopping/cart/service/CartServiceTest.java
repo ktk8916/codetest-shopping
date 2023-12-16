@@ -88,7 +88,7 @@ class CartServiceTest {
             );
         }
 
-        when(cartMapper.findCartItemsByMemberId(1L))
+        when(cartMapper.findCartItemDtosByMemberId(1L))
                 .thenReturn(cartItems);
 
         // when
