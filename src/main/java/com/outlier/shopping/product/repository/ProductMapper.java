@@ -12,11 +12,11 @@ import java.util.List;
 public interface ProductMapper {
 
     @Insert("insert into product(name, price, manager_id) " +
-            "value(#{name}, #{price}, #{manager_id})")
+            "value(#{name}, #{price}, #{managerId})")
     void save(
             @Param("name") String name,
             @Param("price") int price,
-            @Param("manager_id") Long managerId
+            @Param("managerId") Long managerId
     );
 
     @Select("select * " +

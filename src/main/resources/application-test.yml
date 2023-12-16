@@ -5,3 +5,6 @@ spring:
     password: admin
 jwt:
   secret: djaksldhjkhfkjdkljasdkashdkjadhjkasshdjakdhkjadnamncbnmnzxbcnmzxasdlksajdklajdlkas
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
