@@ -1,6 +1,6 @@
 package com.outlier.shopping.global.jwt;
 
-import com.outlier.shopping.auth.domain.entity.Member;
+import com.outlier.shopping.member.domain.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outlier.shopping.cart.repository.CartMapper">
+
+<!--    장바구니 상품과 회원을 fetch 조회-->
+    <select id="findByIdFetchMember" resultMap="findByIdFetchMemberResult">
+        select
+            c.*,
+            m.id as member_id,
+            m.nickname,
+            m.password,
+            m.username
+        from cart_item c
+        inner join member m
+        on c.member_id = m.id
+        where c.id = #{cartItemId}
+    </select>
+
+    <resultMap id="findByIdFetchMemberResult" type="com.outlier.shopping.cart.domain.entity.CartItem">
+        <id property="id" column="id" />
+        <result property="quantity" column="quantity" />
+        <association property="member" javaType="com.outlier.shopping.member.domain.entity.Member" resultMap="memberResultMap" />
+    </resultMap>
+
+    <resultMap id="memberResultMap" type="com.outlier.shopping.member.domain.entity.Member">
+        <id property="id" column="member_id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="nickname" column="nickname" />
+    </resultMap>
+
+<!--    회원의 장바구니 상품과 상품 정보를 fetch 조회-->
+    <select id="findByMemberIdFetchProduct" resultMap="findByMemberIdFetchProduct">
+        select
+            c.*,
+            p.id as product_id,
+            p.name,
+            p.price
+        from cart_item c
+        inner join product p
+        on c.product_id = p.id
+        where c.member_id = #{memberId}
+    </select>
+
+    <resultMap id="findByMemberIdFetchProduct" type="com.outlier.shopping.cart.domain.entity.CartItem">
+        <id property="id" column="id" />
+        <result property="quantity" column="quantity" />
+        <association property="product" javaType="com.outlier.shopping.product.domain.entity.Product" resultMap="productResultMap" />
+    </resultMap>
+
+    <resultMap id="productResultMap" type="com.outlier.shopping.product.domain.entity.Product">
+        <id property="id" column="product_id" />
+        <result property="name" column="name" />
+        <result property="price" column="price" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.outlier.shopping.cart.domain.entity.CartItem"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into cart_item(member_id, product_id, quantity)
+        value(#{member.id}, #{product.id}, #{quantity})
+    </insert>
+
+    <select id="findByMemberIdAndProductId" resultType="com.outlier.shopping.cart.domain.entity.CartItem">
+        select *
+        from cart_item c
+        where member_id = #{memberId}
+        and product_id = #{productId}
+    </select>
+
+    <update id="updateQuantityById">
+        update cart_item
+        set quantity = #{quantity}
+        where id = #{cartItemId}
+    </update>
+
+    <delete id="deleteByMemberId">
+        delete from cart_item
+        where member_id = #{memberId}
+    </delete>
+
+    <delete id="deleteById">
+        delete from cart_item
+        where id = #{cartItemId}
+    </delete>
+</mapper>

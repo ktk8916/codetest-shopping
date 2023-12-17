@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outlier.shopping.product.repository.ProductQueryMapper">
+
+<!--    조건에 따른 상품 썸네일 조회-->
+    <select id="findProductThumbnailByCondition" resultType="com.outlier.shopping.product.domain.dto.ProductThumbnailDto">
+        select id, name, price
+        from product p
+        <where>
+            <if test="keyword != null">
+                and p.name like concat('%', #{keyword}, '%')
+            </if>
+        </where>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+<!--    조건에 따른 상품 총 개수-->
+    <select id="findTotalSizeByCondition">
+        select count(*)
+        from product p
+        <where>
+            <if test="keyword != null">
+                and p.name like concat('%', #{keyword}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>

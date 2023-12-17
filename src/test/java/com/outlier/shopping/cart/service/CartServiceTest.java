@@ -7,6 +7,8 @@ import com.outlier.shopping.cart.domain.response.CartItemResponse;
 import com.outlier.shopping.cart.exception.CartExceptionType;
 import com.outlier.shopping.cart.repository.CartMapper;
 import com.outlier.shopping.global.exception.CustomException;
+import com.outlier.shopping.member.domain.entity.Member;
+import com.outlier.shopping.product.domain.entity.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,8 @@ class CartServiceTest {
         cartService.addItem(1L, request);
 
         // then
-        verify(cartMapper, never()).updateQuantity(anyInt(), anyLong());
-        verify(cartMapper).save(1L, 1L, 10);
+        verify(cartMapper, never()).updateQuantityById(anyInt(), anyLong());
+        verify(cartMapper, atLeastOnce()).save(any());
     }
 
     @DisplayName("장바구니에 상품이 존재하면, 수량을 추가한다.")
@@ -56,8 +58,8 @@ class CartServiceTest {
         ItemAddRequest request = new ItemAddRequest(1L, 10);
 
         CartItem cartItem = CartItem.builder()
-                .memberId(1L)
-                .productId(1L)
+                .member(Member.fromId(1L))
+                .product(Product.fromId(1L))
                 .quantity(10)
                 .build();
 
@@ -68,27 +70,29 @@ class CartServiceTest {
         cartService.addItem(1L, request);
 
         // then
-        verify(cartMapper).updateQuantity(eq(20), any());
+        verify(cartMapper).updateQuantityById(eq(20), any());
     }
 
     @DisplayName("내 장바구니 상품들을 조회한다.")
     @Test
     void getMyCartItems(){
         // given
-        List<CartItemDto> cartItems = new ArrayList<>();
+        List<CartItem> cartItems = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
+            Product product = Product.builder()
+                    .price(i * 1000)
+                    .build();
+
             cartItems.add(
-                    CartItemDto.builder()
-                            .id((long) i)
-                            .name(String.valueOf(i))
-                            .price(i * 1000)
+                    CartItem.builder()
+                            .product(product)
                             .quantity(i)
                             .build()
             );
         }
 
-        when(cartMapper.findCartItemDtosByMemberId(1L))
+        when(cartMapper.findByMemberIdFetchProduct(1L))
                 .thenReturn(cartItems);
 
         // when
@@ -105,12 +109,12 @@ class CartServiceTest {
     void deleteById(){
         // given
         CartItem cartItem = CartItem.builder()
-                .memberId(1L)
-                .productId(1L)
+                .member(Member.fromId(1L))
+                .product(Product.fromId(1L))
                 .quantity(10)
                 .build();
 
-        when(cartMapper.findById(any()))
+        when(cartMapper.findByIdFetchMember(any()))
                 .thenReturn(Optional.of(cartItem));
 
         // when
@@ -125,12 +129,12 @@ class CartServiceTest {
     void deleteByIdInvalidCartOwner(){
         // given
         CartItem cartItem = CartItem.builder()
-                .memberId(1L)
-                .productId(1L)
+                .member(Member.fromId(1L))
+                .product(Product.fromId(1L))
                 .quantity(10)
                 .build();
 
-        when(cartMapper.findById(any()))
+        when(cartMapper.findByIdFetchMember(any()))
                 .thenReturn(Optional.of(cartItem));
 
         Long anotherMemberId = 2L;
@@ -145,7 +149,7 @@ class CartServiceTest {
     @Test
     void deleteByIdNotExistItem(){
         // given
-        when(cartMapper.findById(1L))
+        when(cartMapper.findByIdFetchMember(1L))
                 .thenReturn(Optional.empty());
 
         // when, then
@@ -153,5 +157,4 @@ class CartServiceTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage(CartExceptionType.CART_ITEM_NOT_FOUND.getMessage());
     }
-
 }

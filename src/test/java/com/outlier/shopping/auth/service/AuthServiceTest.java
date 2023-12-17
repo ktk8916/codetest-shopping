@@ -1,11 +1,11 @@
 package com.outlier.shopping.auth.service;
 
-import com.outlier.shopping.auth.domain.entity.Member;
+import com.outlier.shopping.member.domain.entity.Member;
 import com.outlier.shopping.auth.domain.request.LoginRequest;
 import com.outlier.shopping.auth.domain.request.SignupRequest;
 import com.outlier.shopping.auth.domain.response.LoginResponse;
 import com.outlier.shopping.auth.exception.AuthExceptionType;
-import com.outlier.shopping.auth.repository.MemberMapper;
+import com.outlier.shopping.member.repository.MemberMapper;
 import com.outlier.shopping.global.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,18 +33,18 @@ class AuthServiceTest {
     @MockBean
     private MemberMapper memberMapper;
 
-    @DisplayName("회원가입을 한다.")
+    @DisplayName("회원가입 후, 토큰을 발급받는다.")
     @Test
     void signup(){
         // given
         SignupRequest request = new SignupRequest("username", "password", "nickname");
 
         // when
-        authService.signup(request);
+        LoginResponse response = authService.signup(request);
 
         // then
-        verify(memberMapper, atLeastOnce())
-                .save(anyString(), anyString(), anyString());
+        verify(memberMapper, atLeastOnce()).save(any());
+        assertThat(response.accessToken()).isNotNull();
     }
 
     @DisplayName("중복된 username으로 회원가입 시 예외가 발생한다.")
@@ -53,7 +53,7 @@ class AuthServiceTest {
         // given
         doThrow(DuplicateKeyException.class)
                 .when(memberMapper)
-                .save(anyString(), anyString(), anyString());
+                .save(any());
 
         SignupRequest request = new SignupRequest("username", "password", "nickname");
 

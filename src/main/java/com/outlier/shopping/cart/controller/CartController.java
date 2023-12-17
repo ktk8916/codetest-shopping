@@ -4,6 +4,7 @@ import com.outlier.shopping.cart.domain.reqeust.ItemAddRequest;
 import com.outlier.shopping.cart.domain.response.CartItemResponse;
 import com.outlier.shopping.cart.service.CartService;
 import com.outlier.shopping.global.jwt.TokenInfo;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +21,7 @@ public class CartController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addItem(
             @AuthenticationPrincipal TokenInfo tokenInfo,
-            @RequestBody ItemAddRequest request
+            @RequestBody @Valid ItemAddRequest request
     ){
         cartService.addItem(tokenInfo.getId(), request);
     }

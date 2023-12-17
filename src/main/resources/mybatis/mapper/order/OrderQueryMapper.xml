@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outlier.shopping.order.repository.OrderQueryMapper">
+<!--    내 주문 내역 조회-->
+    <select id="findReceiptByMemberIdAndCondition" resultMap="orderReceiptResultMap">
+        select
+            o.id,
+            o.total_price,
+            o.created_at,
+            oi.order_price,
+            oi.quantity,
+            p.id as product_id,
+            p.name,
+            p.price
+        from orders o
+        inner join order_item oi
+        on oi.order_id = o.id
+        inner join product p
+        on oi.product_id = p.id
+        where o.member_id = #{memberId}
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+    <select id="findReceiptTotalSizeByMemberId">
+        select count(*)
+        from orders o
+        where o.member_id = #{memberId}
+    </select>
+
+    <!-- ProductThumbnailDto에 대한 resultMap -->
+    <resultMap id="productThumbnailResultMap" type="com.outlier.shopping.product.domain.dto.ProductThumbnailDto">
+        <id property="id" column="product_id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
+    <!-- OrderDetailDto에 대한 resultMap -->
+    <resultMap id="orderDetailResultMap" type="com.outlier.shopping.order.domain.dto.OrderDetailDto">
+        <result property="quantity" column="quantity"/>
+        <result property="orderPrice" column="order_price"/>
+        <association property="product" resultMap="productThumbnailResultMap" />
+    </resultMap>
+
+    <!-- OrderReceiptDto에 대한 resultMap -->
+    <resultMap id="orderReceiptResultMap" type="com.outlier.shopping.order.domain.dto.OrderReceiptDto">
+        <id property="id" column="id"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="orderItems" ofType="com.outlier.shopping.order.domain.dto.OrderDetailDto" resultMap="orderDetailResultMap"/>
+    </resultMap>
+</mapper>

@@ -7,6 +7,8 @@ import com.outlier.shopping.cart.domain.response.CartItemResponse;
 import com.outlier.shopping.cart.exception.CartExceptionType;
 import com.outlier.shopping.cart.repository.CartMapper;
 import com.outlier.shopping.global.exception.CustomException;
+import com.outlier.shopping.member.domain.entity.Member;
+import com.outlier.shopping.product.domain.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,24 +25,34 @@ public class CartService {
         Optional<CartItem> findCartItem = cartMapper.findByMemberIdAndProductId(memberId, request.productId());
 
         if(findCartItem.isEmpty()){
-            cartMapper.save(memberId, request.productId(), request.quantity());
+            CartItem addCartItem = CartItem.createCartItem(
+                Member.fromId(memberId),
+                Product.fromId(request.productId()),
+                request.quantity()
+            );
+
+            cartMapper.save(addCartItem);
             return;
         }
 
         CartItem cartItem = findCartItem.get();
         int quantity = cartItem.getQuantity() + request.quantity();
 
-        cartMapper.updateQuantity(quantity, cartItem.getId());
+        cartMapper.updateQuantityById(quantity, cartItem.getId());
     }
 
     public CartItemResponse getMyCartItems(Long memberId) {
-        List<CartItemDto> cartItems = cartMapper.findCartItemDtosByMemberId(memberId);
+        List<CartItem> cartItems = cartMapper.findByMemberIdFetchProduct(memberId);
 
         int totalPrice = cartItems.stream()
-                .mapToInt(item -> item.price() * item.quantity())
+                .mapToInt(CartItem::getSumPrice)
                 .sum();
 
-        return CartItemResponse.of(cartItems, totalPrice);
+        List<CartItemDto> items = cartItems.stream()
+                .map(CartItemDto::fromEntity)
+                .toList();
+
+        return CartItemResponse.of(items, totalPrice);
     }
 
     public void deleteById(Long memberId, Long cartItemId) {
@@ -58,11 +70,11 @@ public class CartService {
     }
 
     private CartItem findById(Long cartItemId){
-        return cartMapper.findById(cartItemId)
+        return cartMapper.findByIdFetchMember(cartItemId)
                 .orElseThrow(() -> new CustomException(CartExceptionType.CART_ITEM_NOT_FOUND));
     }
 
     private boolean isValidCartOwner(Long memberId, CartItem cartItem) {
-        return cartItem.getMemberId().equals(memberId);
+        return cartItem.getMember().getId().equals(memberId);
     }
 }
