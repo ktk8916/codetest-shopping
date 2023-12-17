@@ -27,7 +27,7 @@ public class ProductController {
 
     @GetMapping
     public ProductSearchResponse searchByCondition(
-            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ){
