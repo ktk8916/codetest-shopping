@@ -1,9 +1,12 @@
 package com.outlier.shopping.member.domain.entity;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member {
 
     private Long id;
@@ -17,6 +20,12 @@ public class Member {
                 .password(password)
                 .nickname(nickname)
                 .build();
+    }
+
+    public static Member fromId(Long memberId){
+        Member member = new Member();
+        member.id = memberId;
+        return member;
     }
 
     @Builder
