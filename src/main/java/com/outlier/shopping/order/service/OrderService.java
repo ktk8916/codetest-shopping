@@ -63,7 +63,7 @@ public class OrderService {
     public OrderHistoryResponse getMyOrderDetails(Long memberId, int page, int size) {
         int offset = page * size;
         List<OrderReceiptDto> orders = orderQueryMapper.findReceiptByMemberIdAndCondition(memberId, size, offset);
-        int totalSize = orderQueryMapper.findReceiptTotalSizeByCondition(memberId);
+        int totalSize = orderQueryMapper.findReceiptTotalSizeByMemberId(memberId);
         return OrderHistoryResponse.of(orders, page, size, totalSize);
     }
 }

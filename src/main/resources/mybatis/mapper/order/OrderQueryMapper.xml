@@ -24,7 +24,7 @@
         offset #{offset}
     </select>
 
-    <select id="findReceiptTotalSizeByCondition">
+    <select id="findReceiptTotalSizeByMemberId">
         select count(*)
         from orders o
         where o.member_id = #{memberId}

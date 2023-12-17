@@ -9,5 +9,5 @@ import java.util.List;
 public interface OrderQueryMapper {
 
     List<OrderReceiptDto> findReceiptByMemberIdAndCondition(Long memberId, int limit, int offset);
-    int findReceiptTotalSizeByCondition(Long memberId);
+    int findReceiptTotalSizeByMemberId(Long memberId);
 }
