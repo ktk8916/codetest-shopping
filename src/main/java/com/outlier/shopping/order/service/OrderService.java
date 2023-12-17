@@ -57,7 +57,7 @@ public class OrderService {
         // 장바구니 초기화
         cartMapper.deleteByMemberId(memberId);
 
-        return BillResponse.of(order.getId(), totalPrice,order.getCreatedAt());
+        return BillResponse.of(order.getId(), totalPrice, order.getCreatedAt());
     }
 
     public OrderHistoryResponse getMyOrderDetails(Long memberId, int page, int size) {
