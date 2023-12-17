@@ -1,10 +1,13 @@
 package com.outlier.shopping.product.domain.entity;
 
 import com.outlier.shopping.member.domain.entity.Member;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Product {
 
     private Long id;
@@ -18,6 +21,12 @@ public class Product {
                 .price(price)
                 .manager(manager)
                 .build();
+    }
+
+    public static Product fromId(Long id){
+        Product product = new Product();
+        product.id = id;
+        return product;
     }
 
     @Builder
