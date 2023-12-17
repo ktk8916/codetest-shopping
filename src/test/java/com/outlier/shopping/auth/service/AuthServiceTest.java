@@ -33,18 +33,18 @@ class AuthServiceTest {
     @MockBean
     private MemberMapper memberMapper;
 
-    @DisplayName("회원가입을 한다.")
+    @DisplayName("회원가입 후, 토큰을 발급받는다.")
     @Test
     void signup(){
         // given
         SignupRequest request = new SignupRequest("username", "password", "nickname");
 
         // when
-        authService.signup(request);
+        LoginResponse response = authService.signup(request);
 
         // then
-        verify(memberMapper, atLeastOnce())
-                .save(anyString(), anyString(), anyString());
+        verify(memberMapper, atLeastOnce()).save(any());
+        assertThat(response.accessToken()).isNotNull();
     }
 
     @DisplayName("중복된 username으로 회원가입 시 예외가 발생한다.")
@@ -53,7 +53,7 @@ class AuthServiceTest {
         // given
         doThrow(DuplicateKeyException.class)
                 .when(memberMapper)
-                .save(anyString(), anyString(), anyString());
+                .save(any());
 
         SignupRequest request = new SignupRequest("username", "password", "nickname");
 

@@ -17,8 +17,8 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signup(@RequestBody SignupRequest request){
-        authService.signup(request);
+    public LoginResponse signup(@RequestBody SignupRequest request){
+        return authService.signup(request);
     }
 
     @PostMapping("/login")

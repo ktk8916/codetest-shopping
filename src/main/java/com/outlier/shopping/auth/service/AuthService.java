@@ -21,17 +21,23 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public void signup(SignupRequest request){
+    public LoginResponse signup(SignupRequest request){
         // username 은 중복 허용 x
+        Member member = Member.createMember(
+                request.username(),
+                passwordEncoder.encode(request.password()),
+                request.nickname()
+        );
+
         try {
-            memberMapper.save(
-                    request.username(),
-                    passwordEncoder.encode(request.password()),
-                    request.nickname()
-            );
+            memberMapper.save(member);
         } catch (DuplicateKeyException e) {
             throw new CustomException(AuthExceptionType.INVALID_USERNAME, e);
         }
+
+        String token = jwtProvider.generateToken(member);
+
+        return LoginResponse.of(token);
     }
 
     public LoginResponse login(LoginRequest request) {
