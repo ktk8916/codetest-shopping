@@ -7,6 +7,7 @@
 # ERD
 ![image](https://github.com/ktk8916/shopping/assets/71807768/4c3e4c34-16a5-4f84-b73b-4bb2c1fefb9e)
 
+https://github.com/ktk8916/shopping/blob/main/src/main/resources/sql/script.sql
 
 # 배포
 http://35.232.189.24:8080
