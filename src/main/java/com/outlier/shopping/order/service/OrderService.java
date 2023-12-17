@@ -1,7 +1,8 @@
 package com.outlier.shopping.order.service;
 
-import com.outlier.shopping.cart.domain.dto.CartItemDto;
+import com.outlier.shopping.cart.domain.entity.CartItem;
 import com.outlier.shopping.cart.repository.CartMapper;
+import com.outlier.shopping.member.domain.entity.Member;
 import com.outlier.shopping.order.domain.entity.Order;
 import com.outlier.shopping.order.domain.entity.OrderItem;
 import com.outlier.shopping.order.domain.response.BillResponse;
@@ -23,30 +24,30 @@ public class OrderService {
 
     @Transactional
     public BillResponse orderMyCartItems(Long memberId) {
-        return null;
-//        List<CartItemDto> myCartItems = cartMapper.findByMemberIdFetchProduct(memberId);
-//
-//        int totalPrice = myCartItems.stream()
-//                .mapToInt(item -> item.price() * item.quantity())
-//                .sum();
-//
-//        // 주문 생성
-//        Order order = Order.createOrder(memberId, totalPrice);
-//        orderMapper.save(order);
-//
-//        // 주문 상품 등록
-//        myCartItems.forEach(item -> {
-//            OrderItem orderItem = OrderItem.createOrderItem(
-//                    order.getId(),
-//                    item.id(),
-//                    item.price(),
-//                    item.price());
-//            orderItemMapper.save(orderItem);
-//        });
-//
-//        // 장바구니 초기화
-//        cartMapper.deleteByMemberId(memberId);
-//
-//        return BillResponse.of(order.getId(), totalPrice,order.getCreatedAt());
+        List<CartItem> myCartItems = cartMapper.findByMemberIdFetchProduct(memberId);
+
+        int totalPrice = myCartItems.stream()
+                .mapToInt(CartItem::getSumPrice)
+                .sum();
+
+        // 주문 생성
+        Order order = Order.createOrder(Member.fromId(memberId), totalPrice);
+        orderMapper.save(order);
+
+        // 주문 상품 등록
+        myCartItems.forEach(item -> {
+            OrderItem orderItem = OrderItem.createOrderItem(
+                    order,
+                    item.getProduct(),
+                    item.getSumPrice(),
+                    item.getQuantity());
+            orderItemMapper.save(orderItem);
+        });
+
+        // 장바구니 초기화
+        cartMapper.deleteByMemberId(memberId);
+
+        return BillResponse.of(order.getId(), totalPrice,order.getCreatedAt());
     }
+
 }
