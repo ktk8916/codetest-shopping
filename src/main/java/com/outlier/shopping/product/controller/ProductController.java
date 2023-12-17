@@ -4,6 +4,7 @@ import com.outlier.shopping.global.jwt.TokenInfo;
 import com.outlier.shopping.product.domain.request.CreateProductRequest;
 import com.outlier.shopping.product.domain.response.ProductSearchResponse;
 import com.outlier.shopping.product.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +21,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public void register(
             @AuthenticationPrincipal TokenInfo tokenInfo,
-            @RequestBody CreateProductRequest request
+            @RequestBody @Valid CreateProductRequest request
     ){
         productService.register(tokenInfo.getId(), request);
     }
@@ -29,7 +30,7 @@ public class ProductController {
     public ProductSearchResponse searchByCondition(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size
+            @RequestParam(required = false, defaultValue = "5") int size
     ){
         return productService.searchByCondition(keyword, page, size);
     }
