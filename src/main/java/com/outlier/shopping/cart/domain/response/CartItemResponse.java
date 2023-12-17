@@ -10,9 +10,9 @@ public record CartItemResponse(
         List<CartItemDto> items,
         int totalPrice
 ) {
-    public static CartItemResponse of(List<CartItemDto> cartItems, int totalPrice){
+    public static CartItemResponse of(List<CartItemDto> items, int totalPrice){
         return CartItemResponse.builder()
-                .items(cartItems)
+                .items(items)
                 .totalPrice(totalPrice)
                 .build();
     }
