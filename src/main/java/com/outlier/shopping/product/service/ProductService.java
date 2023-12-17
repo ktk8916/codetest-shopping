@@ -6,6 +6,7 @@ import com.outlier.shopping.product.domain.entity.Product;
 import com.outlier.shopping.product.domain.request.CreateProductRequest;
 import com.outlier.shopping.product.domain.response.ProductSearchResponse;
 import com.outlier.shopping.product.repository.ProductMapper;
+import com.outlier.shopping.product.repository.ProductQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductMapper productMapper;
+    private final ProductQueryMapper productQueryMapper;
 
     public void register(Long managerId, CreateProductRequest request){
         Member manager = Member.fromId(managerId);
@@ -30,8 +32,9 @@ public class ProductService {
     }
 
     public ProductSearchResponse searchByCondition(String keyword, int page, int size) {
-        List<ProductThumbnailDto> products = productMapper.findProductThumbnailByCondition(keyword, size, page * size);
-        int totalSize = productMapper.findTotalSizeByCondition(keyword);
+        int offset = page * size;
+        List<ProductThumbnailDto> products = productQueryMapper.findProductThumbnailByCondition(keyword, size, offset);
+        int totalSize = productQueryMapper.findTotalSizeByCondition(keyword);
         return ProductSearchResponse.of(products, page, size, totalSize);
     }
 }
