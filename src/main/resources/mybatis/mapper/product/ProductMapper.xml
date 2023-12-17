@@ -10,28 +10,4 @@
         insert into product(name, price, manager_id)
         value(#{name}, #{price}, #{manager.id})
     </insert>
-
-<!--    조건에 따른 상품 썸네일 조회-->
-    <select id="findProductThumbnailByCondition">
-        select id, name, price
-        from product p
-        <where>
-            <if test="keyword != null">
-                and p.name like concat('%', #{keyword}, '%')
-            </if>
-        </where>
-        limit #{limit}
-        offset #{offset}
-    </select>
-
-<!--    조건에 따른 상품 총 개수-->
-    <select id="findTotalSizeByCondition">
-        select count(*)
-        from product p
-        <where>
-            <if test="keyword != null">
-                and p.name like concat('%', #{keyword}, '%')
-            </if>
-        </where>
-    </select>
 </mapper>
