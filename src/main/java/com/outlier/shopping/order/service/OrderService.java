@@ -2,12 +2,14 @@ package com.outlier.shopping.order.service;
 
 import com.outlier.shopping.cart.domain.entity.CartItem;
 import com.outlier.shopping.cart.repository.CartMapper;
+import com.outlier.shopping.global.exception.CustomException;
 import com.outlier.shopping.member.domain.entity.Member;
 import com.outlier.shopping.order.domain.dto.OrderReceiptDto;
 import com.outlier.shopping.order.domain.entity.Order;
 import com.outlier.shopping.order.domain.entity.OrderItem;
 import com.outlier.shopping.order.domain.response.BillResponse;
 import com.outlier.shopping.order.domain.response.OrderHistoryResponse;
+import com.outlier.shopping.order.exception.OrderExceptionType;
 import com.outlier.shopping.order.repository.OrderItemMapper;
 import com.outlier.shopping.order.repository.OrderMapper;
 import com.outlier.shopping.order.repository.OrderQueryMapper;
@@ -29,6 +31,10 @@ public class OrderService {
     @Transactional
     public BillResponse orderMyCartItems(Long memberId) {
         List<CartItem> myCartItems = cartMapper.findByMemberIdFetchProduct(memberId);
+
+        if(myCartItems.isEmpty()){
+            throw new CustomException(OrderExceptionType.EMPTY_ORDER_LIST);
+        }
 
         int totalPrice = myCartItems.stream()
                 .mapToInt(CartItem::getSumPrice)
