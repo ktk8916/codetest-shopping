@@ -1,11 +1,11 @@
 package com.outlier.shopping.auth.service;
 
-import com.outlier.shopping.auth.domain.entity.Member;
+import com.outlier.shopping.member.domain.entity.Member;
 import com.outlier.shopping.auth.domain.request.LoginRequest;
 import com.outlier.shopping.auth.domain.request.SignupRequest;
 import com.outlier.shopping.auth.domain.response.LoginResponse;
 import com.outlier.shopping.auth.exception.AuthExceptionType;
-import com.outlier.shopping.auth.repository.MemberMapper;
+import com.outlier.shopping.member.repository.MemberMapper;
 import com.outlier.shopping.global.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

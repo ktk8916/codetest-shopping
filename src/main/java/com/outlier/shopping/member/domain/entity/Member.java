@@ -1,4 +1,4 @@
-package com.outlier.shopping.auth.domain.entity;
+package com.outlier.shopping.member.domain.entity;
 
 import lombok.Builder;
 import lombok.Getter;

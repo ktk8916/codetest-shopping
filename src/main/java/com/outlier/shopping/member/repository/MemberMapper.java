@@ -1,10 +1,9 @@
-package com.outlier.shopping.auth.repository;
+package com.outlier.shopping.member.repository;
 
-import com.outlier.shopping.auth.domain.entity.Member;
+import com.outlier.shopping.member.domain.entity.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.Optional;
 
@@ -19,6 +18,5 @@ public interface MemberMapper {
             @Param("nickname") String nickname
     );
 
-    @Select("select * from member where username = #{username}")
     Optional<Member> findByUsername(@Param("username") String username);
 }
