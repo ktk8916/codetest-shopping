@@ -16,6 +16,10 @@ public class CartItem {
     private Product product;
     private int quantity;
 
+    public int getSumPrice(){
+        return product.getPrice() * quantity;
+    }
+
     public static CartItem createCartItem(Member member, Product product, int quantity){
         return CartItem.builder()
                 .member(member)
