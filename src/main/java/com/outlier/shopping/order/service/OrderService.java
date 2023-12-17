@@ -23,29 +23,30 @@ public class OrderService {
 
     @Transactional
     public BillResponse orderMyCartItems(Long memberId) {
-        List<CartItemDto> myCartItems = cartMapper.findCartItemDtosByMemberId(memberId);
-
-        int totalPrice = myCartItems.stream()
-                .mapToInt(item -> item.price() * item.quantity())
-                .sum();
-
-        // 주문 생성
-        Order order = Order.createOrder(memberId, totalPrice);
-        orderMapper.save(order);
-
-        // 주문 상품 등록
-        myCartItems.forEach(item -> {
-            OrderItem orderItem = OrderItem.createOrderItem(
-                    order.getId(),
-                    item.id(),
-                    item.price(),
-                    item.price());
-            orderItemMapper.save(orderItem);
-        });
-
-        // 장바구니 초기화
-        cartMapper.deleteByMemberId(memberId);
-
-        return BillResponse.of(order.getId(), totalPrice,order.getCreatedAt());
+        return null;
+//        List<CartItemDto> myCartItems = cartMapper.findByMemberIdFetchProduct(memberId);
+//
+//        int totalPrice = myCartItems.stream()
+//                .mapToInt(item -> item.price() * item.quantity())
+//                .sum();
+//
+//        // 주문 생성
+//        Order order = Order.createOrder(memberId, totalPrice);
+//        orderMapper.save(order);
+//
+//        // 주문 상품 등록
+//        myCartItems.forEach(item -> {
+//            OrderItem orderItem = OrderItem.createOrderItem(
+//                    order.getId(),
+//                    item.id(),
+//                    item.price(),
+//                    item.price());
+//            orderItemMapper.save(orderItem);
+//        });
+//
+//        // 장바구니 초기화
+//        cartMapper.deleteByMemberId(memberId);
+//
+//        return BillResponse.of(order.getId(), totalPrice,order.getCreatedAt());
     }
 }
