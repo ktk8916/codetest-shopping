@@ -1,14 +1,21 @@
 package com.outlier.shopping.product.domain.dto;
 
 import com.outlier.shopping.product.domain.entity.Product;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public record ProductThumbnailDto(
-        Long id,
-        String name,
-        int price
-) {
+@Getter
+public class ProductThumbnailDto {
+
+    private Long id;
+    private String name;
+    private int price;
+
     public static ProductThumbnailDto fromEntity(Product product){
         return ProductThumbnailDto.builder()
                 .id(product.getId())
