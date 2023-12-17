@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.outlier.shopping.member.repository.MemberMapper">
+    <select id="findByUsername" resultType="com.outlier.shopping.member.domain.entity.Member">
+        select *
+        from member
+        where username = #{username}
+    </select>
+
+    <insert id="save" parameterType="com.outlier.shopping.member.domain.entity.Member"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into member(username, password, nickname)
+        value(#{username}, #{password}, #{nickname})
+    </insert>
+</mapper>
