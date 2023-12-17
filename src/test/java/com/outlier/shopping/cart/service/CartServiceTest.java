@@ -47,7 +47,7 @@ class CartServiceTest {
         cartService.addItem(1L, request);
 
         // then
-        verify(cartMapper, never()).updateQuantity(anyInt(), anyLong());
+        verify(cartMapper, never()).updateQuantityById(anyInt(), anyLong());
         verify(cartMapper, atLeastOnce()).save(any());
     }
 
@@ -70,27 +70,29 @@ class CartServiceTest {
         cartService.addItem(1L, request);
 
         // then
-        verify(cartMapper).updateQuantity(eq(20), any());
+        verify(cartMapper).updateQuantityById(eq(20), any());
     }
 
     @DisplayName("내 장바구니 상품들을 조회한다.")
     @Test
     void getMyCartItems(){
         // given
-        List<CartItemDto> cartItems = new ArrayList<>();
+        List<CartItem> cartItems = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
+            Product product = Product.builder()
+                    .price(i * 1000)
+                    .build();
+
             cartItems.add(
-                    CartItemDto.builder()
-                            .id((long) i)
-                            .name(String.valueOf(i))
-                            .price(i * 1000)
+                    CartItem.builder()
+                            .product(product)
                             .quantity(i)
                             .build()
             );
         }
 
-        when(cartMapper.findCartItemDtosByMemberId(1L))
+        when(cartMapper.findByMemberIdFetchProduct(1L))
                 .thenReturn(cartItems);
 
         // when
@@ -112,7 +114,7 @@ class CartServiceTest {
                 .quantity(10)
                 .build();
 
-        when(cartMapper.findById(any()))
+        when(cartMapper.findByIdFetchMember(any()))
                 .thenReturn(Optional.of(cartItem));
 
         // when
@@ -132,7 +134,7 @@ class CartServiceTest {
                 .quantity(10)
                 .build();
 
-        when(cartMapper.findById(any()))
+        when(cartMapper.findByIdFetchMember(any()))
                 .thenReturn(Optional.of(cartItem));
 
         Long anotherMemberId = 2L;
@@ -147,7 +149,7 @@ class CartServiceTest {
     @Test
     void deleteByIdNotExistItem(){
         // given
-        when(cartMapper.findById(1L))
+        when(cartMapper.findByIdFetchMember(1L))
                 .thenReturn(Optional.empty());
 
         // when, then

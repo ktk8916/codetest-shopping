@@ -38,17 +38,21 @@ public class CartService {
         CartItem cartItem = findCartItem.get();
         int quantity = cartItem.getQuantity() + request.quantity();
 
-        cartMapper.updateQuantity(quantity, cartItem.getId());
+        cartMapper.updateQuantityById(quantity, cartItem.getId());
     }
 
     public CartItemResponse getMyCartItems(Long memberId) {
-        List<CartItemDto> cartItems = cartMapper.findCartItemDtosByMemberId(memberId);
+        List<CartItem> cartItems = cartMapper.findByMemberIdFetchProduct(memberId);
 
         int totalPrice = cartItems.stream()
-                .mapToInt(item -> item.price() * item.quantity())
+                .mapToInt(CartItem::getSumPrice)
                 .sum();
 
-        return CartItemResponse.of(cartItems, totalPrice);
+        List<CartItemDto> items = cartItems.stream()
+                .map(CartItemDto::fromEntity)
+                .toList();
+
+        return CartItemResponse.of(items, totalPrice);
     }
 
     public void deleteById(Long memberId, Long cartItemId) {
@@ -66,7 +70,7 @@ public class CartService {
     }
 
     private CartItem findById(Long cartItemId){
-        return cartMapper.findById(cartItemId)
+        return cartMapper.findByIdFetchMember(cartItemId)
                 .orElseThrow(() -> new CustomException(CartExceptionType.CART_ITEM_NOT_FOUND));
     }
 
