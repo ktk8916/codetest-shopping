@@ -21,3 +21,18 @@ create table cartItem(
     product_id int,
     quantity int
 );
+
+create table orders(
+    id int auto_increment primary key,
+    member_id int,
+    total_price int,
+    created_at datetime default now()
+);
+
+create table order_item(
+    id int auto_increment primary key,
+    order_id int,
+    product_id int,
+    order_price int,
+    quantity int
+);
