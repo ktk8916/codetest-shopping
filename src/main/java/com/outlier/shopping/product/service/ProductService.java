@@ -20,13 +20,13 @@ public class ProductService {
         Product product = Product.createProduct(
                 request.name(),
                 request.price(),
-                managerId);
+                managerId
+        );
 
         productMapper.save(product);
     }
 
     public ProductSearchResponse searchByCondition(String keyword, int page, int size) {
-
         List<ProductThumbnailDto> products = productMapper.findProductThumbnailByCondition(keyword, size, page * size);
         int totalSize = productMapper.findTotalSizeByCondition(keyword);
         return ProductSearchResponse.of(products, page, size, totalSize);
