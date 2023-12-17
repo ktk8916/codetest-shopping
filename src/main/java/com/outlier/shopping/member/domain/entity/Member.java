@@ -11,6 +11,14 @@ public class Member {
     private String password;
     private String nickname;
 
+    public static Member createMember(String username, String password, String nickname){
+        return Member.builder()
+                .username(username)
+                .password(password)
+                .nickname(nickname)
+                .build();
+    }
+
     @Builder
     public Member(String username, String password, String nickname) {
         this.username = username;
