@@ -31,7 +31,7 @@
         <result property="nickname" column="nickname" />
     </resultMap>
 
-<!--    회원의 장바구니 상품과 상품 정보를 한번의 조회-->
+<!--    회원의 장바구니 상품과 상품 정보를 fetch 조회-->
     <select id="findByMemberIdFetchProduct" resultMap="findByMemberIdFetchProduct">
         select
             c.*,
