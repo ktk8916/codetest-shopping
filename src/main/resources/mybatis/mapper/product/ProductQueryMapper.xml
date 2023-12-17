@@ -5,7 +5,7 @@
 <mapper namespace="com.outlier.shopping.product.repository.ProductQueryMapper">
 
 <!--    조건에 따른 상품 썸네일 조회-->
-    <select id="findProductThumbnailByCondition">
+    <select id="findProductThumbnailByCondition" resultType="com.outlier.shopping.product.domain.dto.ProductThumbnailDto">
         select id, name, price
         from product p
         <where>
