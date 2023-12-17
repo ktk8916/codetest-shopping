@@ -19,9 +19,5 @@ public interface ProductMapper {
         @Param("offset") int offset
     );
 
-    @Select("select count(*) " +
-            "from product p " +
-            "where p.name like #{keyword} ")
     int findTotalSizeByCondition(@Param("keyword") String keyword);
-
 }
