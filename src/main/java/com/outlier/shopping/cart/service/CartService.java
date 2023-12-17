@@ -7,6 +7,8 @@ import com.outlier.shopping.cart.domain.response.CartItemResponse;
 import com.outlier.shopping.cart.exception.CartExceptionType;
 import com.outlier.shopping.cart.repository.CartMapper;
 import com.outlier.shopping.global.exception.CustomException;
+import com.outlier.shopping.member.domain.entity.Member;
+import com.outlier.shopping.product.domain.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,13 @@ public class CartService {
         Optional<CartItem> findCartItem = cartMapper.findByMemberIdAndProductId(memberId, request.productId());
 
         if(findCartItem.isEmpty()){
-            cartMapper.save(memberId, request.productId(), request.quantity());
+            CartItem addCartItem = CartItem.createCartItem(
+                Member.fromId(memberId),
+                Product.fromId(request.productId()),
+                request.quantity()
+            );
+
+            cartMapper.save(addCartItem);
             return;
         }
 
@@ -63,6 +71,6 @@ public class CartService {
     }
 
     private boolean isValidCartOwner(Long memberId, CartItem cartItem) {
-        return cartItem.getMemberId().equals(memberId);
+        return cartItem.getMember().getId().equals(memberId);
     }
 }

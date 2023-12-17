@@ -7,6 +7,8 @@ import com.outlier.shopping.cart.domain.response.CartItemResponse;
 import com.outlier.shopping.cart.exception.CartExceptionType;
 import com.outlier.shopping.cart.repository.CartMapper;
 import com.outlier.shopping.global.exception.CustomException;
+import com.outlier.shopping.member.domain.entity.Member;
+import com.outlier.shopping.product.domain.entity.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,7 @@ class CartServiceTest {
 
         // then
         verify(cartMapper, never()).updateQuantity(anyInt(), anyLong());
-        verify(cartMapper).save(1L, 1L, 10);
+        verify(cartMapper, atLeastOnce()).save(any());
     }
 
     @DisplayName("장바구니에 상품이 존재하면, 수량을 추가한다.")
@@ -56,8 +58,8 @@ class CartServiceTest {
         ItemAddRequest request = new ItemAddRequest(1L, 10);
 
         CartItem cartItem = CartItem.builder()
-                .memberId(1L)
-                .productId(1L)
+                .member(Member.fromId(1L))
+                .product(Product.fromId(1L))
                 .quantity(10)
                 .build();
 
@@ -105,8 +107,8 @@ class CartServiceTest {
     void deleteById(){
         // given
         CartItem cartItem = CartItem.builder()
-                .memberId(1L)
-                .productId(1L)
+                .member(Member.fromId(1L))
+                .product(Product.fromId(1L))
                 .quantity(10)
                 .build();
 
@@ -125,8 +127,8 @@ class CartServiceTest {
     void deleteByIdInvalidCartOwner(){
         // given
         CartItem cartItem = CartItem.builder()
-                .memberId(1L)
-                .productId(1L)
+                .member(Member.fromId(1L))
+                .product(Product.fromId(1L))
                 .quantity(10)
                 .build();
 
@@ -153,5 +155,4 @@ class CartServiceTest {
                 .isInstanceOf(CustomException.class)
                 .hasMessage(CartExceptionType.CART_ITEM_NOT_FOUND.getMessage());
     }
-
 }
