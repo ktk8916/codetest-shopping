@@ -10,17 +10,17 @@ import java.util.Optional;
 @Mapper
 public interface CartMapper {
 
+    void save(CartItem cartItem);
+
+    Optional<CartItem> findByMemberIdAndProductId(
+            @Param("memberId") Long memberId,
+            @Param("productId") Long productId
+    );
+
     @Select("select * from cart_item " +
             "where id = #{cartItemId}")
     Optional<CartItem> findById(@Param("cartItemId") Long cartItemId);
 
-    @Insert("insert into cart_item(member_id, product_id, quantity) " +
-            "value(#{memberId}, #{productId}, #{quantity})")
-    void save(
-            @Param("memberId") Long memberId,
-            @Param("productId") Long productId,
-            @Param("quantity") int quantity
-    );
 
     @Select("select p.id, p.name, p.price, c.quantity " +
             "from cart_item as c inner join product p " +
@@ -32,13 +32,7 @@ public interface CartMapper {
             "where member_id = #{memberId}")
     List<CartItem> findByMemberId(@Param("memberId") Long memberId);
 
-    @Select("select * from cart_item " +
-            "where member_id = #{memberId} " +
-            "and product_id = #{productId}")
-    Optional<CartItem> findByMemberIdAndProductId(
-            @Param("memberId") Long memberId,
-            @Param("productId") Long productId
-    );
+
 
     @Update("update cart_item set quantity = #{quantity} " +
             "where id = #{cartItemId}")
