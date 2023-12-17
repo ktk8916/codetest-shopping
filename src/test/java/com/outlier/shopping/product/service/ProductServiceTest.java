@@ -44,7 +44,7 @@ class ProductServiceTest {
                 .thenReturn(products);
 
         when(productQueryMapper.findTotalSizeByCondition("keyword"))
-                .thenReturn(10);
+                .thenReturn(13);
 
         // when
         ProductSearchResponse response = productService.searchByCondition("keyword", page, size);
@@ -52,5 +52,6 @@ class ProductServiceTest {
         // then
         verify(productQueryMapper).findProductThumbnailByCondition("keyword", 10, 10);
         assertThat(response.products()).hasSize(3);
+        assertThat(response.totalSize()).isEqualTo(13);
     }
 }
