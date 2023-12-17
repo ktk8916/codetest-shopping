@@ -1,5 +1,6 @@
 package com.outlier.shopping.product.service;
 
+import com.outlier.shopping.member.domain.entity.Member;
 import com.outlier.shopping.product.domain.dto.ProductThumbnailDto;
 import com.outlier.shopping.product.domain.entity.Product;
 import com.outlier.shopping.product.domain.request.CreateProductRequest;
@@ -17,10 +18,12 @@ public class ProductService {
     private final ProductMapper productMapper;
 
     public void register(Long managerId, CreateProductRequest request){
+        Member manager = Member.fromId(managerId);
+
         Product product = Product.createProduct(
                 request.name(),
                 request.price(),
-                managerId
+                manager
         );
 
         productMapper.save(product);

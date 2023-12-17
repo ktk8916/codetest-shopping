@@ -8,7 +8,7 @@
     <insert id="save" parameterType="com.outlier.shopping.product.domain.entity.Product"
             useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into product(name, price, manager_id)
-        value(#{name}, #{price}, #{managerId})
+        value(#{name}, #{price}, #{manager.id})
     </insert>
 
 <!--    조건에 따른 상품 썸네일 조회-->
